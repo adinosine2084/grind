@@ -6,20 +6,24 @@
   --ink: #0A0A0A;
   --paper: #FAFAF8;
   --accent: #FFE500;
-  --border: 2px solid #0A0A0A;
-  --shadow: 4px 4px 0px #0A0A0A;
-  --shadow-lg: 6px 6px 0px #0A0A0A;
-  --shadow-sm: 2px 2px 0px #0A0A0A;
-  --font-syne: 'Syne', sans-serif;
-  --font-ibm-plex-mono: 'IBM Plex Mono', monospace;
 }
 
-* { cursor: none !important; }
+/* Only hide cursor on precise-pointer devices (mouse/trackpad, not touch) */
+@media (pointer: fine) {
+  * { cursor: none !important; }
+}
 
 body { background: var(--paper); color: var(--ink); }
 
-/* Custom cursor */
+/* Custom cursor — only shown on precise-pointer devices */
+@media (pointer: fine) {
+  .cursor {
+    display: block;
+  }
+}
+
 .cursor {
+  display: none;
   position: fixed;
   width: 14px;
   height: 14px;
@@ -29,21 +33,24 @@ body { background: var(--paper); color: var(--ink); }
   z-index: 9999;
   transform: translate(-50%, -50%);
   transition: width 0.1s, height 0.1s, background 0.1s;
+  top: -100px; /* hidden offscreen until first mousemove */
+  left: -100px;
 }
+
 .cursor.hovered {
   width: 22px;
   height: 22px;
   background: var(--ink);
 }
 
-/* Brutal button base */
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   border: 2px solid var(--ink);
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -52,6 +59,7 @@ body { background: var(--paper); color: var(--ink); }
   transition: transform 0.1s ease, box-shadow 0.1s ease;
   text-decoration: none;
   white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
 }
 .btn:hover {
   transform: translate(2px, 2px);
@@ -65,28 +73,28 @@ body { background: var(--paper); color: var(--ink); }
 .btn-primary {
   background: var(--accent);
   color: var(--ink);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 6px 6px 0px var(--ink);
 }
 .btn-secondary {
   background: transparent;
   color: var(--ink);
-  box-shadow: var(--shadow);
+  box-shadow: 4px 4px 0px var(--ink);
 }
 .btn-dark {
   background: var(--ink);
   color: var(--accent);
-  box-shadow: var(--shadow);
+  box-shadow: 4px 4px 0px var(--ink);
 }
 
-/* Brutal card */
+/* Cards */
 .card {
   border: 2px solid var(--ink);
-  box-shadow: var(--shadow);
+  box-shadow: 4px 4px 0px var(--ink);
   background: var(--paper);
 }
 .card-lg {
   border: 2px solid var(--ink);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 6px 6px 0px var(--ink);
   background: var(--paper);
 }
 
@@ -95,19 +103,20 @@ body { background: var(--paper); color: var(--ink); }
   border: 2px solid var(--ink);
   border-radius: 0;
   background: var(--paper);
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: 0.875rem;
   padding: 0.75rem 1rem;
   width: 100%;
   outline: none;
   transition: box-shadow 0.1s;
+  -webkit-appearance: none;
 }
 .input-brutal:focus {
   box-shadow: 4px 4px 0 var(--ink);
 }
 .input-brutal::placeholder { color: #aaa; }
 
-/* Tag */
+/* Tags */
 .tag {
   display: inline-block;
   font-size: 0.6rem;
@@ -123,22 +132,25 @@ body { background: var(--paper); color: var(--ink); }
 .tag-done   { background: var(--accent); color: var(--ink); border-color: var(--accent); }
 
 /* Marquee */
-@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-.marquee-track { animation: marquee 20s linear infinite; }
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track { animation: marquee 22s linear infinite; }
 
-/* Fade up animation */
+/* Fade-up entry animation */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.fade-up { animation: fadeUp 0.45s ease forwards; opacity: 0; }
-.delay-1 { animation-delay: 0.08s; }
-.delay-2 { animation-delay: 0.16s; }
-.delay-3 { animation-delay: 0.24s; }
-.delay-4 { animation-delay: 0.32s; }
-.delay-5 { animation-delay: 0.40s; }
+.fade-up           { animation: fadeUp 0.45s ease forwards; opacity: 0; }
+.delay-1           { animation-delay: 0.08s; }
+.delay-2           { animation-delay: 0.16s; }
+.delay-3           { animation-delay: 0.24s; }
+.delay-4           { animation-delay: 0.32s; }
+.delay-5           { animation-delay: 0.40s; }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--paper); }
-::-webkit-scrollbar-thumb { background: var(--ink); }
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: var(--paper); }
+::-webkit-scrollbar-thumb  { background: var(--ink); }
